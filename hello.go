@@ -8,6 +8,7 @@ import (
 
 	"github.com/gothinkster/golang-gin-realworld-example-app/articles"
 	"github.com/gothinkster/golang-gin-realworld-example-app/common"
+	"github.com/gothinkster/golang-gin-realworld-example-app/logcore"
 	"github.com/gothinkster/golang-gin-realworld-example-app/users"
 	"gorm.io/gorm"
 )
@@ -22,6 +23,7 @@ func Migrate(db *gorm.DB) {
 }
 
 func main() {
+	defer logcore.Flush()
 
 	db := common.Init()
 	Migrate(db)
@@ -33,6 +35,7 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(logcore.Middleware())
 
 	// Disable automatic redirect for trailing slashes
 	// This prevents POST body from being lost during redirects
